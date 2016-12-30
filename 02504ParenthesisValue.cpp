@@ -1,47 +1,98 @@
-#include <iostream>
-#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
 
-using namespace std;
+int parS();
+int parB();
+
+char par[30];
+int i;
+
+// for ()
+int parS() { 
+  if (par[i+1] == ')') { // start with ()
+    i++;
+    return 2;
+  }
+  else {
+    int maxIn = 0, temp;
+    while (par[i+1] != ')') {
+      if (par[i+1] == '(') { // start with ((
+        i++;
+	temp = parS();
+      }
+      else if (par[i+1] == '[') { // start with ([
+        i++;
+	temp = parB();
+      }
+      else  { // wrong input;
+	printf("0\n");
+	exit(EXIT_FAILURE);
+      }
+
+      maxIn += temp;
+    }
+    i++;
+    
+    return maxIn * 2;
+  }
+}
+
+// for []
+int parB() {
+  if (par[i+1] == ']') { // start with []
+    i++;
+    return 3;
+  }
+  else {
+    int maxIn = 0, temp;
+    while (par[i+1] != ']') {
+      if (par[i+1] == '(') { // start with [(
+	i++;
+	temp = parS();
+      }
+      else if (par[i+1] == '[') { // start with [[
+	i++;
+	temp = parB();
+      }
+      else  { // wrong input;
+	printf("0\n");
+	exit( EXIT_FAILURE);
+      }
+
+      maxIn += temp;
+    }
+    i++;
+
+    return maxIn * 3;
+  }
+}
+
+
 
 int main() {
-  char par[30];
-  int val[30], checkpoint[30], chtmp = 0;
+  
+  scanf("%s", par);
 
-  cin >> par;
+  i = -1;
+  int maxIn = 0, temp;
+  while (par[i+1] == '(' || par[i+1] == '[') {
+    if (par[i+1] == '(') {
+      i++;
+      temp = parS();
+    }
+    else if (par[i+1] == '[') {
+      i++;
+      temp = parB();
+    }
+    else  { // wrong input;
+      printf("0\n");
+      return 0;
+    }
 
-  for (int i = 0; i < strlen(par); i++) {
-    if (par[i] == '(' || par[i] == '[') {
-      val[i] = 0;
-      checkpoint[chtmp++] = i;
-    }
-    
-    else if (par[i] == ')') {
-      if (val[i-1] == 0)
-	val[i] = 2;
-      else
-	val[i] = val[i-1] * 2;
-    }
-    
-    else if (par[i] == ']') {
-      if (val[i-1] == 0)
-	val[i] = 3;
-      else
-	val[i] = val[i-1] * 3;
-    }
-  }
-  checkpoint[chtmp++] = strlen(par);
-
-  int resultMax = val[checkpoint[0]-1];
-  for (int i = 1; i < chtmp; i++) {
-    if (resultMax < val[checkpoint[i]-1])
-      resultMax = val[checkpoint[i]-1];
+    maxIn += temp;
   }
 
-  for (int i = 0; i < strlen(par); i++)
-    cout << i << " : " << val[i] << endl;
-    
-
-  //cout << resultMax << endl;
+  printf("%d\n", maxIn);
   
   return 0;
 }
