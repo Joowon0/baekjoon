@@ -5,7 +5,7 @@ using namespace std;
 int nodeNum, linkNum, startNum;
 int edge[1001][1001];
 int DFS[1001], Dtemp = 0;
-int BFS[1001], Btemp = 0;
+int BFS[1001], BtempR = 0; 
 
 void DFSfunc(int start) {
   DFS[Dtemp++] = start;
@@ -35,35 +35,33 @@ void DFSfunc(int start) {
 }
 
 void BFSfunc(int start) {
-  int BtempS = -1;
-  for (int i = 1; i < nodeNum + 1; i++) {
-     // if it is linked
-    if (i != start && edge[start][i] == 1) {
-      //cout << endl << "start checking " << i << endl;
-      // if not visited
-      int isChecked = 0;
-      for (int j = 0; j < Btemp; j++) {
-	if (BFS[j] == i) {
-	  isChecked = 1;
-	  break;
+  int BtempF = 0;
+  BFS[BtempR++] = start;
+
+  while (BtempF != BtempR) {
+    for (int i = 1; i < nodeNum+1; i++) {
+      // if it is linked    
+      if (i != BFS[BtempF] && edge[BFS[BtempF]][i] == 1) {
+	//cout << endl << "start checking " << i << endl;
+	// if not visited
+	int isChecked = 0;
+	for (int j = 0; j < BtempR; j++) {
+	  if (BFS[j] == i) {
+	    isChecked = 1;
+	    break;
+	  }
+	}
+	if (isChecked == 1) {
+	  //cout << "node " << i << " is checked before" << endl;
+	  continue;
+	}
+	else {
+	  //cout << "node " << i << " is not checked before" << endl;
+	  BFS[BtempR++] = i;
 	}
       }
-      if (isChecked == 1) {
-	//cout << "node " << i << " is checked before" << endl;
-	continue;
-      }
-      else {
-	//cout << "node " << i << " is not checked before" << endl;
-	BFS[Btemp++] = i;
-        if (BtempS == -1)
-	  BtempS = Btemp-1;
-      }
     }
-  }
-  
-  if (BtempS != -1) {
-    for (int i = BtempS; i < Btemp + 1; i++)
-      BFSfunc(BFS[i]);
+    BtempF++;
   }
 }
 
@@ -80,7 +78,7 @@ int main() {
   }
 
   // print for check
-  
+  /*
   cout << "    1 2 3 4 5 6 7"<< endl;
   for (int i = 1; i < nodeNum + 1; i++) {
     cout << i << " : ";
@@ -89,16 +87,15 @@ int main() {
     }
     cout << endl;
   }
-  
+  */
   
   DFSfunc(startNum);
   for (int i = 0; i < Dtemp; i++)
     cout << DFS[i] << " ";
   cout << endl;
 
-  BFS[Btemp++] = startNum;
   BFSfunc(startNum);
-  for (int i = 0; i < Btemp; i++)
+  for (int i = 0; i < BtempR; i++)
     cout << BFS[i] << " ";
   cout << endl;
   
