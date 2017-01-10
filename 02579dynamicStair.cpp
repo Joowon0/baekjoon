@@ -25,6 +25,7 @@ int main() {
     stairSum[i][1] = stair[i] + temp;
 
     // fill stairSum[i][0] (might stepped on stair[i-2])
+    // max(stairSum[i][0], stepped on (i - 1, i))
     if (temp < stairSum[i-1][1])
       temp = stairSum[i-1][1];
     stairSum[i][0] = stair[i] + temp;
@@ -33,9 +34,10 @@ int main() {
   temp = stairSum[stairNum][0];
   if (temp < stairSum[stairNum][1])
     temp = stairSum[stairNum][1];
+  for (int i = 1; i <= stairNum; i++)
+    cout << stairSum[i][0] << " " << stairSum[i][1] << endl;
   cout << temp << endl;
-  //for (int i = 1; i <= stairNum; i++)
-  //  cout << stairSum[i][0] << " " << stairSum[i][1] << endl;
+  
   
   return 0;
 }
