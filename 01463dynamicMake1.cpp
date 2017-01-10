@@ -2,79 +2,64 @@
 
 using namespace std;
 
-int main () {
-  long int numIn;
-  //int base[100000][3];
-  unsigned long long oldNums[3] = { 6000000000000000000, 6000000000000000000, 6000000000000000000}, newNums[3];
-     // [n][0] : divide by 3
-     // [n][1] : divide by 2
-     // [n][2] : subtract 1
-  long int i = 1;
-  long int temp;
+int base[1000001];
 
+int make1(int x) {
+  //cout << x << endl;
+  if (x == 2)
+    return 1;
+  else if (x == 3)
+    return 1;
+  
+  else {
+    int temp = 600000000, x3 = 0, x2 = 0, x1 = 0;
+    //cout << x << " " << x % 3 << endl;
+    if (x % 3 == 0) {
+      //cout << "YES" << endl;
+      if (base[x / 3] != 0) {
+	x3 = base[x / 3];
+      }
+      else {
+	base[x/3] = make1(x / 3) + 1;
+	x3 = base[x / 3];
+      }
+      if (temp > x3) // find min
+	temp = x3;
+    }
+    if (x % 2 == 0) {
+      if (base[x / 2] != 0) {
+	x2 = base[x / 2];
+      }
+      else {
+	base[x/2] = make1(x / 2) + 1;
+	x2 = base[x/2];
+      }
+      if (temp > x2) // find min
+	temp = x2;
+    }
+    if (base[x - 1] != 0) {
+      x1 = base[x - 1];
+    }
+    else {
+      base[x-1] = make1(x - 1) + 1;
+      x1 = base[x-1];
+    }
+    
+    if (temp > x1) // find min
+      temp = x1;
+
+    //cout << x << " "  << x3 << " " << x2 << " " << x1 << " " << temp << endl;
+
+    return temp;
+  }
+}
+
+int main () {
+  int numIn;
+  
   cin >> numIn;
 
-  if (numIn == 1) {
-    cout << "0" << endl;
-    return 0;
-  }
+  cout << make1(numIn) << endl;
 
-  if (numIn % 3 == 0)
-    oldNums[0] = numIn / 3;
-  if (numIn % 2 == 0)
-    oldNums[1] = numIn / 2;
-  oldNums[2] = numIn - 1;
-
-  while (i++) {
-    // stop case
-    if (oldNums[0] == 1)
-      break;
-    if (oldNums[1] == 1)
-      break;
-    if (oldNums[2] == 1)
-      break;
-
-    
-    // print for test
-    
-    for (int i = 0; i < 3; i++)
-      cout << oldNums[i] << " ";
-    cout << endl;
-    
-
-    // DP newNums[0]
-    
-    if (oldNums[0] % 3 == 0)
-      newNums[0] = oldNums[0] / 3;
-     if (oldNums[1] % 3 == 0 && newNums[0] > oldNums[1] / 3)
-      newNums[0] = oldNums[1] / 3;
-    if (oldNums[2] % 3 == 0 && newNums[0] > oldNums[2] / 3)
-      newNums[0] = oldNums[2] / 3;
-    
-    
-    // DP newNums[1]
-    if (oldNums[0] % 2 == 0)
-      newNums[1] = oldNums[0] / 2;
-    if (oldNums[1] % 2 == 0 && newNums[1] > oldNums[1] / 2)
-      newNums[1] = oldNums[1] / 2;
-    if (oldNums[2] % 2 == 0 && newNums[1] > oldNums[2] / 2)
-      newNums[1] = oldNums[2] / 2;
-    
-    
-    // DP newNums[2]
-    newNums[2] = oldNums[0];
-    if (newNums[2] > oldNums[1])
-      newNums[2] = oldNums[1];
-    if (newNums[2] > oldNums[2])
-      newNums[2] = oldNums[2];
-    newNums[2]--;
-
-    // swap newNums to oldNums
-    for (int i = 0; i < 3; i++)
-      oldNums[i] = newNums[i];
-  }
-    
-  cout << i-1 << endl;
-  
   return 0;
 }
