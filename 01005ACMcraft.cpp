@@ -57,9 +57,9 @@ int main() {
   while(caseNum--) {
     cin >> buildingNum >> ruleNum;
 
-    memset(buildingCost, 0, sizeof(int) * buildingNum );
-    memset(memo, 0, sizeof(int) * buildingNum );
-    memset(rules, 0, sizeof(int) * ruleNum * 2 );
+    memset(buildingCost, 0, sizeof(int) * (buildingNum + 1) );
+    memset(memo, 0, sizeof(int) * ( buildingNum + 1) );
+    memset(rules, 0, sizeof(int) * ( ruleNum + 1) * 2 );
     
     for (int i = 1; i <= buildingNum; i++)
       cin >> buildingCost[i];
