@@ -2,46 +2,32 @@
 
 using namespace std;
 
+int sums (int start, int end) {
+  return (end - start + 1) * (end + start) / 2;
+}
+
 int main() {
   int sum, minLen;
-  int memo[101][101];
   int a =  -1, b = 110;
 
   cin >> sum >>minLen;
-
-  // sum from num i to num j (i <= j)
-  for (int i = 0; i < 101; i++) {
-    memo[i][i] = i;
-    for (int j = i+1; j < 101; j++) {
-      memo[i][j] = memo[i][j-1] + j;
-      //cout << "memo[" << i << "][" << j << "] = " << memo[i][j] << endl;
-    }
-  }
-  /*
-  // print for test
-  for (int i = 0; i < 10; i++) {
-    for (int j = 1; j < 10; j++)
-      cout << memo[i][j] << "\t";
-    cout << endl;
-  }
-  */
   
   // search
-  for (int i = 0; i <= sum && i < 101; i++) {
-    for (int j = i+1; j <= sum && j < 101; j++) {
+  for (int i = 0; i <= sum; i++) {
+    for (int j = i+1; j <= sum; j++) {
+      int s = sums(i, j);
       /*
-      cout << "memo[" << i << "][" << j << "] = " << memo[i][j]
-	   << " [" << a << "][" << b << "] "
-	   << (memo[i][j] == sum) << " " << (j-i >= minLen) << " " << (j-i < b-a)
+      cout << "memo[" << i << "][" << j << "] = " << s
+	//<< (memo[i][j] == sum) << " " << (j-i >= minLen) << " " << (j-i < b-a)
 	   << endl;
       */
       // find match
-      if (memo[i][j] == sum && j-i >= minLen - 1 && j-i < b-a ) {
+      if (s == sum && j-i >= minLen - 1 && j-i < b-a ) {
 	a = i; b = j;
 	break; // no more match in the row
       }
       // search other row
-      else if (memo[i][j] > sum)
+      else if (s > sum)
 	break;
     }
   }
