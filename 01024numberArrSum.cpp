@@ -3,7 +3,7 @@
 using namespace std;
 
 int sums (int start, int end) {
-  return (end - start + 1) * (end + start) / 2;
+  return (end - start + 1) * ((end + start) / 2);
 }
 
 int main() {
