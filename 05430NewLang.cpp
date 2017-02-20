@@ -3,7 +3,7 @@
 
 int main() {
   int caseNum;
-  char functions[100000], temp[300000];
+  char dump, functions[100000], temp[300000];
   int arrNum, arr[100000], front, rear;
   bool isReverse, isError;
 
@@ -15,9 +15,16 @@ int main() {
     scanf("%d", &arrNum);
     scanf("%s", temp);
 
-    for (int i = 0; i < arrNum; i++)
-      arr[i] = temp[2*i+1] - '0';
-
+    int t = 0, n = 0;
+    for (int i = 1; i < strlen(temp); i++) {
+      if (temp[i] <= '9' && '0' <= temp[i])
+	n = n * 10 + temp[i] - '0';
+      else {
+	arr[t++] = n;
+	n = 0;
+      }
+    }
+    
     front = 0; rear = arrNum - 1;
     isReverse = 0, isError = 0;
 
