@@ -5,38 +5,36 @@ using namespace std;
 int main() {
   int caseNum;
   int start, end, leng;
-  float half, times;
-
-  int cnt;
+  int cnt, times;
+  bool ifodd;
 
   cin >> caseNum;
 
   while(caseNum--) {
     cin >> start >> end;
+    
     //initiate
     leng = end - start;
-    half = (float) leng / 2;
     cnt = 1; times = 0;
-
-    //cout << leng << " " << half << endl;
+    ifodd = true;
 
     // calculate
-    while(half > 0) {
+    while(leng > 0) {
       times++;
-      //cout << times << " : " << half << " " << cnt << endl;
-      if (cnt <= half) {
-	half -= cnt;
-	cnt++;
+      
+      // add first time
+      if (ifodd) {
+	leng -= cnt;
+	ifodd = false;
       }
-      // the last of counting
-      else{
-	half *= 2;
-	if (half == cnt - 2 || half == cnt - 1 || half == cnt)
-	  times -= 0.5;
-	break;
+      // add second time
+      else {
+	leng -= cnt;
+	cnt++;
+	ifodd = true;
       }
     }
-    cout << times * 2 << endl;
+    cout << times << endl;
   }
   
   return 0;
