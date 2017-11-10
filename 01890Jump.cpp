@@ -18,20 +18,20 @@ int main() {
   // get input
   cin >> size;
   for (unsigned long long r = 0; r < size; r++)
-    for (unsigned long long c = 0; c < size; c++)
+    for (unsigned long long c = 0; c < size; c++) {
       cin >> space[r][c];
+      times[r][c] = 0;
+    }
 
   // initialize
   times[0][0] = 1;
   
   // check step by step
   for (unsigned long long r = 0; r < size; r++) {
-    for (unsigned long long c = 0; c < size; c++){
+    for (unsigned long long c = 0; c < size; c++) {
       // end point
-      if (space[r][c] == 0) {
-	cout << times[r][c] << endl;
-	return 0;
-      }	
+      if (times[r][c] == 0 || space[r][c] == 0)
+        continue;
       
       // check right
       if (space[r][c]+r < size)
@@ -46,5 +46,8 @@ int main() {
       //print();
     }
   }
+
+  cout << times[size-1][size-1] << endl;
+  
   return 0;
 }
