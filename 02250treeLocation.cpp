@@ -4,6 +4,7 @@ using namespace std;
 
 int caseNum;
 int inTemp[10002][2];
+int findR [10002];
 int place [10002][2], index=0;
 int maxLevel = 1;
 // 0 - node num
@@ -19,6 +20,21 @@ void print() {
 void print2() {
   for (int i = 0; i < index; i++)
     cout << i << "\tlevel : " << place[i][1] << "\tNum : " << place[i][0] << endl;
+}
+
+int findRoot() {
+  for (int i = 0; i < caseNum; i++) {
+    if (inTemp[i][0] != -1)
+      findR[inTemp[i][0]] = 1;
+    if (inTemp[i][1] != -1)
+      findR[inTemp[i][1]] = 1;
+  }
+
+  for (int i = 1; i <= caseNum; i++) {
+    //cout << i << " : " << findR[i] << endl;
+    if (findR[i] == 0)
+      return i;
+  }
 }
 
 void getIn(int node, int level){
@@ -43,9 +59,11 @@ int main() {
     cin >> inTemp[temp][0] >> inTemp[temp][1];
   }
 
+  int root = findRoot();
+  
   //print();
 
-  getIn(1, 1);
+  getIn(root, 1);
 
   //print2();
 
