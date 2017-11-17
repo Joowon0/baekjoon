@@ -52,13 +52,19 @@ int main() {
  
   int parent, child, dist;
   for (int i = 0; i < caseNum-1; i++) {
-    cin >> parent >> child >> dist;
-    links[parent].push_back(node(child, dist));
-    links[child].push_back(node(parent, dist));
-    dp1[parent] = dp1[child] = -1;
-    dp2[parent] = dp2[child] = -1;
-    //    links[child][0] = parent;
-    //    links[child][1] = dist;
+    cin >> parent;
+    
+    cin >> child;
+    while (child != -1) {
+      cin >> dist;
+
+      links[parent].push_back(node(child, dist));
+      links[child].push_back(node(parent, dist));
+      dp1[parent] = dp1[child] = -1;
+      dp2[parent] = dp2[child] = -1;
+
+      cin >> child;
+    }
   }
 
   //print();
