@@ -1,67 +1,47 @@
 #include <iostream>
-#include <algorithm>
+// #include <algorithm>
 
 using namespace std;
 
-int nums [25];
+int numOfNum, targetNum;
+int inNums[25];
+int counter = 0;
 
-int findCombiNum(int target, int start, int end) {
-  if (target == 0 || target == nums[start])
-    return 1;
+void dfs(int start, int sum) {
+  if (start >= numOfNum)
+    return;
   else {
-    int counter = 0;
-    for (int i = start; i < end && target >= nums[i]; i++) {
-      int found =  findCombiNum(target - nums[i], i+1, end);
-      counter +=found;
+    for (int i = start; i < numOfNum; i++) {
+      // check if sum is same as target
+      int iIncludeSum = sum + inNums[i];
+      if (iIncludeSum == targetNum) {
+	counter ++;
+	 // cout << start << " " << sum << "\t"
+	 //      << i << " : " << inNums[i] << endl;
+      }
 
-      // cout << target << " " << i << " : " << found << endl;
+      // include i th num
+      dfs( i+1, iIncludeSum);
+
+      // don't include i th num -> next index
+
+      // while (inNums[i] == inNums[i+1] && i < numOfNum)
+      // 	i++;
     }
-
-    // cout << "Called target : " << target <<
-    //   "\trange : [" << start << "~" << end << "]" <<
-    //   "\tval : " << counter << endl;
-      
-    return counter;
   }
 }
 
 int main() {
-  int numNum, targetNum;
-  int negNum, posStart;
+  cin >> numOfNum >> targetNum;
 
-  cin >> numNum >> targetNum;
+  for(int i = 0; i < numOfNum; i++)
+    cin >> inNums[i];
 
-  for (int i = 0; i < numNum; i++)
-    cin >> nums[i];
-
-  sort(nums, nums + numNum);
-
-  // find out number of negs and pos's start index
-  int i;
-  negNum = posStart = numNum;
-  for (i = 0; i < numNum; i++) {
-    if (0 <= nums[i]) {
-      negNum = i;
-      break;
-    }
-  }
-
-  for (; i < numNum; i++) {
-    if (0 < nums[i]) {
-      posStart = i;
-      break;
-    }
-  }
-
-  //
-  if (targetNum > 0)
-    cout << findCombiNum(targetNum, posStart, numNum) << endl;
+  // sort( inNums, inNums + numOfNum);
   
+  dfs( 0, 0);
 
-  cout << negNum << " " << posStart << endl;
-  
-  for (int i = 0; i < numNum; i++)
-    cout << nums[i] << " ";
+  cout << counter << endl;
   
   return 0;
 }
