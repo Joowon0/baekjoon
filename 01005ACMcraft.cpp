@@ -1,75 +1,62 @@
-#include <iostream>
-#include <string.h>
+#include <stdio.h>
+#include <vector>
 
 using namespace std;
 
-int caseNum, buildingNum, ruleNum;
-int buildingCost[1001], rules[100001][2]; // 1 is first index
-int targetBuilding;
-int memo[1001] ;
+int costs[1001];
+int memo[1001];
+vector<int> prereq[1001]; // prereq[i] - list of builings to build i
 
+int findCost(int target) {
+  if (memo[target] > -1) // already counted
+    return memo[target];
+  else {
+    int maxPreCost = findCost(prereq[target][0]);
 
+    for (int i = 1; i < prereq[target].size(); i++) {
+      int preCost = findCost(prereq[target][i]);
 
-int countCost(int bNum) {
-  // check if calculated b4
-  if (memo[bNum] != 0) {
-    return memo[bNum];
-  }
-  
-  int findRule[100001], ruleTemp = 0; // 0 is first index
-  // base case
-  for (int i = 1; i <= ruleNum; i++) {
-    if (rules[i][1] == bNum) { // check pre-required rules
-      findRule[ruleTemp++] = rules[i][0];
+      if (maxPreCost < preCost )
+	maxPreCost = preCost;
     }
-  }
-  //cout << "bNum : " << bNum << " ruleTemp : " << ruleTemp << endl;
-  if (ruleTemp == 0) {
-    memo[bNum] = buildingCost[bNum];
-    return buildingCost[bNum];
-  }
 
-  /*
-  for (int i = 0; i < ruleTemp; i++)
-    cout << findRule[i] << " ";
-  cout << endl;
-  */
-  
-  // DP
-  int temp = countCost(findRule[0]), temp2;
-  for (int i = 1; i < ruleTemp; i++) {
-    temp2 = countCost(findRule[i]);
-    if (temp < temp2)
-      temp = temp2;
+    memo[target] = maxPreCost + costs[target];
+    return memo[target];
   }
-
-  memo[bNum] = temp + buildingCost[bNum];
-  /*
-  cout << bNum << " : " << temp << " "
-       << buildingCost[bNum] << " " << memo[bNum] << endl;
-  */
-  return memo[bNum];
 }
 
 int main() {
-  cin >> caseNum;
+  int caseNum, buildingNum, ruleNum;
+  int targetNum;
+
+  scanf("%d", &caseNum);
 
   while(caseNum--) {
-    cin >> buildingNum >> ruleNum;
+    scanf("%d %d", &buildingNum, &ruleNum);
 
-    memset(buildingCost, 0, sizeof(int) * (buildingNum + 1) );
-    memset(memo, 0, sizeof(int) * ( buildingNum + 1) );
-    memset(rules, 0, sizeof(int) * ( ruleNum + 1) * 2 );
-    
+    for(int i = 0; i <= buildingNum; i++) {
+      memo[i] = -1;
+      prereq[i].clear();
+    }
+
+    int temp;
+    for(int i = 1; i <= buildingNum; i++)
+      scanf("%d", costs+i);
+
+    int src, dst;
+    while(ruleNum--) {
+      scanf("%d %d", &src, &dst);
+      prereq[dst].push_back(src);
+    }
+
+    // base case for no prerequisite
     for (int i = 1; i <= buildingNum; i++)
-      cin >> buildingCost[i];
-    for (int j = 1; j <= ruleNum; j++)
-      cin >> rules[j][0] >> rules[j][1];
+      if (prereq[i].size() == 0)
+	memo[i] = costs[i];
 
-    cin >> targetBuilding;
+    scanf("%d", &targetNum);
 
-    cout << countCost(targetBuilding) << endl;
-    
+    printf("%d\n", findCost(targetNum));
   }
   
   
